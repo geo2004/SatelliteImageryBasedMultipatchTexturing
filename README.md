@@ -18,15 +18,10 @@ SatelliteRoofTexturer/
 ├── README.md
 └── BaseRPK/                            ← Unzipped template from CityEngine
     ├── .resolvemap.xml
-    ├── esriinfo/
     ├── rules/
     │   ├── SatelliteRoof_Multipatch.cga
-    │   └── SatelliteRoof_Multipatch.cgb 
-    └── assets/
-        └── 3D_City_Design_Assets/
-            └── Material_Library/
-                ├── FlatRoof/           ← Can be empty
-                └── SlopedRoof/         ← Can be empty
+    └── bin/
+        └── SatelliteRoof_Multipatch.cgb 
 ```
 ## Usage
 ```text

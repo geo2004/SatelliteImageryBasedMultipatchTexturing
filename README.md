@@ -49,4 +49,4 @@ To apply the generated textures to your scene:
 ## Requirements
 1. ArcGIS Pro (with 3D Analyst extension recommended for initial Multipatch extraction from LIDAR or DSM Data.).
 2. Active internet connection (downloads Esri World Imagery tiles at zoom level 19).
-3. Standard Python libraries included with ArcGIS Pro (arcpy, requests, Pillow).
+3. Standard Python libraries included with ArcGIS Pro (`arcpy, requests, Pillow`).

@@ -1,0 +1,28 @@
+version "2025.1"
+
+const texBase = "assets/3D_City_Design_Assets/Material_Library/"
+const texFlat = texBase + "FlatRoof/"
+
+// Remember to swap this back to your Python string attribute later!
+// attr texture_path = ""
+attr Flat_Roof_Texture = "Flat Standard 1"
+
+@StartRule @InMesh
+Mass -->
+    // 1. Force ALL axes (X, Y, Z) to align with the World (True North/East/Up)
+    alignScopeToAxes()
+    
+    // 2. Project using the new, perfectly unrotated geographic envelope.
+    // NOTE: CityEngine's Z-axis points South. Making scope.sz negative 
+    // cleanly flips the V-axis so your image isn't upside-down.
+    setupProjection(0, scope.xz, scope.sx, -scope.sz)
+    
+    comp(f) { top: RoofFace | side: WallFace | all: RoofFace }
+
+RoofFace -->
+    projectUV(0)
+    // 3. rotateUV() is completely removed.
+    texture(texFlat + Flat_Roof_Texture + ".jpg")
+
+WallFace -->
+    X.

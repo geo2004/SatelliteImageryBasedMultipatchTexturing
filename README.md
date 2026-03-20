@@ -45,7 +45,7 @@ To apply the generated textures to your scene:
 4. In the attribute mapping section, map the `Flat_Roof_Texture` rule parameter to the newly created `Flat_Roof_Texture` attribute field.
 5. The satellite imagery will instantly render on all valid roof faces.
 
-<img src="https://raw.githubusercontent.com/geo2004/leaflet/refs/heads/master/example.png" alt="Textured 3D Roofs Example" width="600">
+<img src="https://raw.githubusercontent.com/geo2004/leaflet/refs/heads/master/example.png" alt="Textured 3D Roofs Example" width="100%">
 
 ## Requirements
 1. ArcGIS Pro (with 3D Analyst extension recommended for initial Multipatch extraction from LIDAR or DSM Data. Multipatch can be generated using "Extract LoD2 Building Tool, LAS to Multipatch Tool. or any other capable to generate multipatches tools).

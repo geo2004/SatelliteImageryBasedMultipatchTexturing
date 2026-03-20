@@ -1,6 +1,6 @@
 An ArcGIS Pro Python Toolbox (`.pyt`) for mass-texturing multipatch buildings with raster data sources.
 
-This tool bridges the gap between raw 3D building models (extracted via 3D Analyst) and realistic urban visualizations. It automatically downloads raster tiles from any map services (currently specific for XYZ/TMS Tiles Protocols) for each building's footprint, injects it into a CityEngine Rule Package (`.rpk`), and maps the textures to both flat and sloped roof faces—all without requiring manual CGA rule editing or CGB compilation per run.
+This tool bridges the gap between raw 3D building models (extracted via 3D Analyst) and realistic urban visualizations. It automatically downloads raster tiles from any map services (currently specific for XYZ/TMS Tiles Protocols) for each building's footprint, injects it into a CityEngine Rule Package (`.rpk`), and maps the textures to both flat and sloped roof faces—all without requiring manual CGA rule editing or CGB compilation per run. You can also using locally stored Raster Data (UAV Orthomosaics or Orthorectified Satellite Imagery) in GeoTIFF format as texture data source. 
 
 ## Features
 * **Native ArcGIS Pro UI:** Runs directly from the Geoprocessing pane. Accepts Map Layers or raw File Geodatabase paths.

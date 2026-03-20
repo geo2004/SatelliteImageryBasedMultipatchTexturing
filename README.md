@@ -48,6 +48,6 @@ To apply the generated textures to your scene:
 <img src="https://raw.githubusercontent.com/geo2004/leaflet/refs/heads/master/example.png" alt="Textured 3D Roofs Example" width="100%">
 
 ## Requirements
-1. ArcGIS Pro (with 3D Analyst extension recommended for initial Multipatch extraction from LIDAR or DSM Data. Multipatch can be generated using "Extract LoD2 Building Tool, LAS to Multipatch Tool. or any other capable to generate multipatches tools).
+1. ArcGIS Pro (with 3D Analyst extension recommended for initial Multipatch extraction from LIDAR or DSM Data. Multipatch can be generated using "Extract LoD2 Building Tool", "LAS to Multipatch Tool", or any other capable-to-generate multipatches tools in ArcGIS Pro).
 2. Active internet connection (for downloading the online map tiles).
 3. Standard Python libraries included with ArcGIS Pro (`arcpy, requests, Pillow`).

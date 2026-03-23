@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resolvemap>
+  <entry key="bin/Building_Textures.cgb" value="bin/Building_Textures.cgb" />
+  <entry key="rules/Building_Textures.cga" value="rules/Building_Textures.cga" />
+  <entry key="/Satellite_Roof/rules/Building_Textures.cga" value="rules/Building_Textures.cga" />
+  <entry key="bin/Building_Textures$_ce_.cgb" value="bin/Building_Textures$_ce_.cgb" />
+</resolvemap>

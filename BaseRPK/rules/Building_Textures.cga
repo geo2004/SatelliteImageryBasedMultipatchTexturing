@@ -1,0 +1,53 @@
+version "2025.1"
+
+// ==========================================
+// 1. TEXTURE PATH DEFINITIONS
+// ==========================================
+const texBase = "assets/3D_City_Design_Assets/Material_Library/"
+const texFlat = texBase + "FlatRoof/"
+const texSloped = texBase + "SlopedRoof/"
+
+const texFacadeResGnd = "assets/Facades/Residential/Ground/"
+const texFacadeResUpp = "assets/Facades/Residential/Upper/"
+const texFacadeAptGnd = "assets/Facades/Apartment/Ground/"
+const texFacadeAptUpp = "assets/Facades/Apartment/Upper/"
+const texFacadeComGnd = "assets/Facades/Commercial/Ground/"
+const texFacadeComUpp = "assets/Facades/Commercial/Upper/"
+
+// ==========================================
+// 2. ATTRIBUTES
+// ==========================================
+attr Flat_Roof_Texture = "Flat Standard 1"
+attr Sloped_Roof_Texture = "Sloped Standard 1"
+attr Building_Type = "Residential"
+
+const groundFloorHeight = 4.5
+const floorHeight = 3.5
+
+// ==========================================
+// 3. MAIN GEOMETRY RULES
+// ==========================================
+@StartRule @InMesh
+Mass -->
+    alignScopeToAxes()
+    setupProjection(0, scope.xz, scope.sx, -scope.sz)
+    comp(f) { top: RoofFace | side: WallFace | all: RoofFace }
+
+RoofFace -->
+    color(1,1,1)
+    projectUV(0)
+    texture(texFlat + Flat_Roof_Texture + ".jpg")
+
+WallFace -->
+    color(1,1,1)
+    setupProjection(0, scope.xy, 4, floorHeight)
+    projectUV(0)
+    WallColorRoute
+    
+WallColorRoute -->
+    case Building_Type == "Apartment":
+        texture(fileRandom(texFacadeAptGnd + "*.jpg"))
+    case Building_Type == "Commercial":
+        texture(fileRandom(texFacadeComGnd + "*.jpg"))
+    else:
+        texture(fileRandom(texFacadeResGnd + "*.jpg"))

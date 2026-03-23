@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<metadata xml:lang="en">
+	<Esri>
+		<CreaDate>20260323</CreaDate>
+		<CreaTime>14300200</CreaTime>
+		<ArcGISFormat>1.0</ArcGISFormat>
+		<SyncOnce>TRUE</SyncOnce>
+		<ModDate>20260323</ModDate>
+		<ModTime>23133000</ModTime>
+		<scaleRange>
+			<minScale>150000000</minScale>
+			<maxScale>5000</maxScale>
+		</scaleRange>
+		<ArcGISProfile>ItemDescription</ArcGISProfile>
+	</Esri>
+	<tool name="SatelliteRoofTexturerTool" displayname="Texturing Building Model Using Raster" toolboxalias="SatelliteRoofTexturer">
+		<arcToolboxHelpPath>c:\program files\arcgis\pro\Resources\Help\gp</arcToolboxHelpPath>
+		<parameters>
+			<param name="in_multipatch" displayname="Input LoD2 Multipatch Feature Class" type="Required" direction="Input" datatype="Feature Layer" expression="in_multipatch">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;The 3D multipatch feature layer containing your untextured building models. This is typically generated using the 'Extract Multipatch From Mesh', 'LAS Building Multipatch', 'Extract Lod2 Buildings' or similar 3D Analyst tools. The tool will add texture mapping attribute fields to this layer.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A multipatch feature layer or feature class path containing LoD2 building geometry. Must be a valid multipatch geometry type. Each feature will receive a satellite-derived roof texture and a facade texture based on its classified building type. The tool will add three new fields to this feature class: Flat_Roof_Texture, Sloped_Roof_Texture, and Building_Type.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="use_fields" displayname="Attribute Fields to Evaluate (e.g., building, amenity, shop)" type="Optional" direction="Input" datatype="Multiple Value" expression="{use_fields;use_fields...}">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Select one or more attribute fields from the input multipatch feature class that describe building usage or land use type (e.g., "building", "amenity", "shop", "landuse"). These fields are evaluated in order to classify each building into one of three facade texture categories: Residential, Apartment, or Commercial. Common sources include OpenStreetMap-derived fields. If no fields are selected, or if no matching values are found, all buildings will default to Residential textures.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A semicolon-delimited list of field names from the input multipatch feature class to evaluate for building type classification. Fields are checked in order; the first field containing a recognized value determines the building type. Recognized values include: Commercial (commercial, retail, office, shop, mall, school, hospital, etc.), Apartment (apartments, hotel, dormitory, hostel, etc.), and Residential (residential, house, detached, terrace, etc.)&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="source_mode" displayname="Imagery Source Mode" type="Required" direction="Input" datatype="String" expression="Online XYZ/TMS Tiles | Local Raster File">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;Choose the method for acquiring roof imagery. &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;font-size:12pt"&gt;Online XYZ/TMS Tiles&lt;/SPAN&gt;&lt;SPAN STYLE="font-size:12pt"&gt; will download imagery dynamically from a web map service. &lt;/SPAN&gt;&lt;SPAN STYLE="font-weight:bold;font-size:12pt"&gt;Local Raster File&lt;/SPAN&gt;&lt;SPAN STYLE="font-size:12pt"&gt; will clip imagery from an existing orthomosaic or raster stored on your computer.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A string value specifying the imagery source mode. Accepted values are "Online XYZ/TMS Tiles" or "Local Raster File". When set to "Online XYZ/TMS Tiles", the xyz_url and zoom_level parameters are required. When set to "Local Raster File", the local_raster parameter is required.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="xyz_url" displayname="XYZ/TMS Tile URL" type="Optional" direction="Input" datatype="String" expression="{xyz_url}">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;The XYZ or TMS tile URL template for the online imagery source. Must contain {z}, {x}, and {y} placeholders. Defaults to Esri World Imagery. Other compatible sources include Google Maps, OpenStreetMap, or any standard slippy map tile server. Only active when Source Mode is set to "Online XYZ/TMS Tiles".&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A string containing the XYZ/TMS tile URL template. Must include {z}, {x}, and {y} format placeholders (case-insensitive). Example: "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}". Ignored when source_mode is set to "Local Raster File"&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="zoom_level" displayname="Zoom Level" type="Optional" direction="Input" datatype="Long" expression="{zoom_level}">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;The zoom level used when downloading XYZ/TMS tiles. Higher values produce more detailed roof textures but require more tiles to be downloaded per building. Zoom 19 is recommended for individual building detail. Valid range is 1 to 23. Only active when Source Mode is set to "Online XYZ/TMS Tiles".&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;An integer between 1 and 23 specifying the XYZ tile zoom level. Controls the spatial resolution of downloaded roof textures. Zoom 18-19 is recommended for LoD2 building texturing. Higher zoom levels increase download time and tile count. Ignored when source_mode is set to "Local Raster File"&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="local_raster" displayname="Local Raster File (Orthophoto/UAV)" type="Optional" direction="Input" datatype="Raster Layer" expression="{local_raster}">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;A locally stored raster dataset (orthophoto, UAV survey, or georeferenced aerial image) to use as the roof texture source. The tool will clip the raster to each building's footprint extent and use the result as the roof texture. Must be georeferenced and overlap the input multipatch features. Only active when Source Mode is set to "Local Raster File".&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;A path to a local raster dataset compatible with arcpy.management.Clip. Must be georeferenced and spatially overlap the input multipatch feature class. The raster's spatial reference is used directly for clipping; building footprints are reprojected to match before extraction. Ignored when source_mode is set to "Online XYZ/TMS Tiles"&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="image_format" displayname="Output Image Format" type="Required" direction="Input" datatype="String" expression="JPEG | PNG">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;The file format for generated roof texture images. JPEG produces smaller file sizes suitable for large datasets and is recommended for most workflows. PNG produces lossless output and is preferred when roof texture quality is critical or when the source imagery contains transparency&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A string specifying the output image format for roof textures. Accepted values are "JPEG" or "PNG". JPEG files are saved at 90% quality. This setting affects only the dynamically generated satellite roof textures; facade textures stored in the BaseRPK are used as-is regardless of this setting.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+			<param name="out_rpk" displayname="Output Rule Package (.rpk)" type="Required" direction="Output" datatype="File" expression="out_rpk">
+				<dialogReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN STYLE="font-size:12pt"&gt;The file path for the output Rule Package (.rpk) file. The RPK bundles the CGA rule file, all satellite roof textures, and all facade texture assets into a single deployable package. The output RPK can be applied directly to the input multipatch layer in ArcGIS Pro's Symbology pane under "Layer 3D to Feature" or shared via ArcGIS Online.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</dialogReference>
+				<pythonReference>&lt;DIV STYLE="text-align:Left;"&gt;&lt;P&gt;&lt;SPAN&gt;A string file path with a .rpk extension specifying where the output Rule Package will be written. The RPK is a ZIP-formatted archive containing the CGA rule, compiled .cgb binary, satellite roof texture images, facade texture assets, and an updated .resolvemap.xml index. An existing file at this path will be overwritten.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;</pythonReference>
+			</param>
+		</parameters>
+		<summary>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Automates the texturing of 3D multipatch buildings by generating a custom Rule Package (.rpk) embedded with Orthomosaic Aerial/Satellite Imagery.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</summary>
+		<usage>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;This tool bridges the gap between raw 3D building models and realistic urban visualizations. It takes an input multipatch feature layer, calculates the geographic extent of each individual building, and dynamically downloads or clips high-resolution imagery from Online Sources or Local Rasters for that specific footprint.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;The tool handles the image processing and automatically injects the cropped satellite textures into a staging environment based on a template Rule Package. It bypasses the need for manual CGA rule compilation by mapping the textures directly to both flat and sloped roof assets.&lt;/SPAN&gt;&lt;/P&gt;&lt;P&gt;&lt;SPAN&gt;What it does to your data:&lt;/SPAN&gt;&lt;/P&gt;&lt;OL&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;Adds and populates two new fields (Flat_Roof_Texture and Sloped_Roof_Texture) on your input multipatch layer, linking each building's Object ID to its respective texture.&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;Compiles a ready-to-use .rpk file containing all the downloaded assets and updated mapping rules.&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;LI&gt;&lt;P&gt;&lt;SPAN&gt;Adding random texture for other faces than roofs.&lt;/SPAN&gt;&lt;/P&gt;&lt;/LI&gt;&lt;/OL&gt;&lt;P&gt;&lt;SPAN STYLE="font-style:italic;"&gt;Note: The tool utilizes isolated temporary directories for caching and staging during execution, ensuring that Object ID assignments never conflict between different feature classes.&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;&lt;/DIV&gt;</usage>
+		<scriptExamples>
+			<scriptExample>
+				<title>Example Usage</title>
+				<para>&lt;DIV STYLE="text-align:Left;"&gt;&lt;DIV&gt;&lt;P&gt;&lt;SPAN&gt;Example usage&lt;/SPAN&gt;&lt;/P&gt;&lt;/DIV&gt;&lt;/DIV&gt;</para>
+				<code>&lt;codeSample&gt;
+  &lt;title&gt;Texture Buildings from Online Satellite Imagery&lt;/title&gt;
+  &lt;para&gt;
+    Downloads satellite roof textures from an XYZ tile server and generates 
+    a fully textured Rule Package for a LoD2 multipatch building dataset 
+    derived from OpenStreetMap.
+  &lt;/para&gt;
+  &lt;code&gt;
+import arcpy
+
+arcpy.ImportToolbox(r"C:\Projects\DigitalTwin\Building_Textures.pyt")
+
+arcpy.SatelliteRoofTexturer.TextureRoofsFromSatellite(
+    in_multipatch    = r"C:\Projects\DigitalTwin\Buildings.gdb\OSM_Buildings_LoD2",
+    use_fields       = "building;amenity;shop",
+    source_mode      = "Online XYZ/TMS Tiles",
+    xyz_url          = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    zoom_level       = 19,
+    local_raster     = None,
+    image_format     = "JPEG",
+    out_rpk          = r"C:\Projects\DigitalTwin\Output\Building_Textures.rpk"
+)
+  &lt;/code&gt;
+&lt;/codeSample&gt;
+
+&lt;codeSample&gt;
+  &lt;title&gt;Texture Buildings from Local UAV Orthophoto&lt;/title&gt;
+  &lt;para&gt;
+    Extracts roof textures from a locally stored UAV orthophoto raster instead 
+    of downloading from an online tile server. Suitable for offline workflows 
+    or when high-resolution survey imagery is available.
+  &lt;/para&gt;
+  &lt;code&gt;
+import arcpy
+
+arcpy.ImportToolbox(r"C:\Projects\DigitalTwin\Building_Textures.pyt")
+
+arcpy.SatelliteRoofTexturer.TextureRoofsFromSatellite(
+    in_multipatch    = r"C:\Projects\DigitalTwin\Buildings.gdb\OSM_Buildings_LoD2",
+    use_fields       = "building;landuse",
+    source_mode      = "Local Raster File",
+    xyz_url          = None,
+    zoom_level       = None,
+    local_raster     = r"C:\Projects\DigitalTwin\Imagery\UAV_Orthophoto.tif",
+    image_format     = "PNG",
+    out_rpk          = r"C:\Projects\DigitalTwin\Output\Building_Textures_UAV.rpk"
+)
+  &lt;/code&gt;
+&lt;/codeSample&gt;
+
+&lt;codeSample&gt;
+  &lt;title&gt;Batch Processing Multiple Districts&lt;/title&gt;
+  &lt;para&gt;
+    Iterates over multiple district feature classes in a geodatabase and 
+    generates a separate RPK for each. Useful for large city datasets split 
+    by administrative boundary.
+  &lt;/para&gt;
+  &lt;code&gt;
+import arcpy
+import os
+
+arcpy.ImportToolbox(r"C:\Projects\DigitalTwin\Building_Textures.pyt")
+
+gdb_path   = r"C:\Projects\DigitalTwin\Buildings.gdb"
+output_dir = r"C:\Projects\DigitalTwin\Output"
+
+arcpy.env.workspace = gdb_path
+feature_classes = arcpy.ListFeatureClasses(feature_type="MultiPatch")
+
+for fc in feature_classes:
+    fc_path  = os.path.join(gdb_path, fc)
+    rpk_path = os.path.join(output_dir, f"{fc}_Textured.rpk")
+
+    arcpy.AddMessage(f"Processing: {fc}")
+
+    arcpy.SatelliteRoofTexturer.TextureRoofsFromSatellite(
+        in_multipatch    = fc_path,
+        use_fields       = "building;amenity;shop",
+        source_mode      = "Online XYZ/TMS Tiles",
+        xyz_url          = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        zoom_level       = 19,
+        local_raster     = None,
+        image_format     = "JPEG",
+        out_rpk          = rpk_path
+    )
+
+    arcpy.AddMessage(f"RPK saved: {rpk_path}")
+  &lt;/code&gt;
+&lt;/codeSample&gt;</code>
+			</scriptExample>
+		</scriptExamples>
+	</tool>
+	<dataIdInfo>
+		<idCitation>
+			<resTitle>Texturing Building Model Using Raster</resTitle>
+		</idCitation>
+		<searchKeys>
+			<keyword>multipatch</keyword>
+			<keyword>texture</keyword>
+			<keyword>3d</keyword>
+		</searchKeys>
+		<idCredit>@Bramantiyo Marjuki, (https://youtube.com/c/geo2004) (https://www.fiverr.com/sellers/bram_juki)</idCredit>
+	</dataIdInfo>
+	<distInfo>
+		<distributor>
+			<distorFormat>
+				<formatName>ArcToolbox Tool</formatName>
+			</distorFormat>
+		</distributor>
+	</distInfo>
+	<mdHrLv>
+		<ScopeCd value="005">
+		</ScopeCd>
+	</mdHrLv>
+	<mdDateSt Sync="TRUE">20260323</mdDateSt>
+</metadata>

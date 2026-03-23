@@ -1,10 +1,10 @@
 An ArcGIS Pro Python Toolbox (`.pyt`) for mass-texturing multipatch buildings with raster data sources.
 
-This tool bridges the gap between raw 3D building models (extracted via 3D Analyst) and realistic urban visualizations. It automatically downloads raster tiles from any map services (currently specific for XYZ/TMS Tiles Protocols) for each building's footprint, injects it into a CityEngine Rule Package (`.rpk`), and maps the textures to both flat and sloped roof faces—all without requiring manual CGA rule editing or CGB compilation per run. You can also using locally stored Raster Data (UAV Orthomosaics or Orthorectified Satellite Imagery) in GeoTIFF format as texture data source. 
+This tool bridges the gap between raw 3D building models (extracted via 3D Analyst) and realistic urban visualizations. It automatically downloads raster tiles from any map services (currently specific for XYZ/TMS Tiles Protocols) for each building's footprint, injects it into a CityEngine Rule Package (`.rpk`), and maps the textures to both flat and sloped roof faces—all without requiring manual CGA rule editing or CGB compilation per run. You can also using locally stored Raster Data (UAV Orthomosaics or Orthorectified Satellite Imagery) in GeoTIFF format as texture data source. This tool also add random textures for model faces other than roofs. 
 
 ## Features
 * **Native ArcGIS Pro UI:** Runs directly from the Geoprocessing pane. Accepts Map Layers or raw File Geodatabase paths.
-* **Smart Attribute Mapping:** Automatically adds `Flat_Roof_Texture` and `Sloped_Roof_Texture` fields to your multipatch feature class.
+* **Smart Attribute Mapping:** Automatically adds `Flat_Roof_Texture`  `Sloped_Roof_Texture` and `Building_Type` fields to your multipatch feature class.
 * **Zero OID Conflicts:** Utilizes isolated temporary directories for raster caching and `.rpk` staging. Cache is automatically wiped after execution, ensuring no texture mix-ups between different feature classes.
 
 ## Folder Structure
@@ -21,7 +21,12 @@ SatelliteRoofTexturer/
     ├── rules/
     │   ├── SatelliteRoof_Multipatch.cga
     └── bin/
-        └── SatelliteRoof_Multipatch.cgb 
+        └── SatelliteRoof_Multipatch.cgb
+    └── assets/
+        └── Facades/                     ← Asset Folders of non-roofs image textures (keep folders structure "as is")
+            └── Apartment/
+            └── Commercial/
+            └── Residential/ 
 ```
 ## Usage
 ```text
@@ -30,20 +35,21 @@ SatelliteRoofTexturer/
 3. Browse to and select SatelliteRoofTexturer.pyt.
 4. Open the Texture Roof Multipatch From Satellite Imagery tool.
 5. Input Multipatch Feature Class: Select your untextured building/Multipatch layer (must be a Multipatch).
-6. Choose the raster sources mode (online XYZ/TMS Tiles Sources) or Local Raster Files in GeoTiff Format.
-7. Set the input data path (URL for online sources) or Browse to locally stored Raster data.
-8. Set the preferred zoom level (online XYZ/TMS Tiles only)
-9. Set the Output Raster Tiles (Lossy JPEG or Losless PNG)
-10. Set the Output Rule Package (.rpk): Choose the save destination for your new textured RPK.
-11. Click Run.
+6. Select one or more attribute fields from the input multipatch feature class that describe building usage or land use type (e.g., "building", "amenity", "shop", "landuse"). These fields are evaluated in order to classify each building into one of three facade texture categories: Residential, Apartment, or Commercial. Common sources include OpenStreetMap-derived fields. If no fields are selected, or if no matching values are found, all buildings will default to Residential textures.
+7. Choose the raster sources mode (online XYZ/TMS Tiles Sources) or Local Raster Files in GeoTiff Format.
+8. Set the input data path (URL for online sources) or Browse to locally stored Raster data.
+9. Set the preferred zoom level (online XYZ/TMS Tiles only)
+10. Set the Output Raster Tiles (Lossy JPEG or Losless PNG)
+11. Set the Output Rule Package (.rpk): Choose the save destination for your new textured RPK.
+12. Click Run.
 ```
 ## After Running
 To apply the generated textures to your scene:
 1. Ensure your updated multipatch feature class is added to a Local or Global Scene.
 2. Open the Symbology pane for the layer and change the primary symbology to Procedural Fill.
 3. Load the output .rpk file you just generated to the Rules Button.
-4. In the attribute mapping section, map the `Flat_Roof_Texture` rule parameter to the newly created `Flat_Roof_Texture` attribute field.
-5. The satellite imagery will instantly render on all valid roof faces.
+4. In the attribute mapping section, map the `Flat_Roof_Texture` rule parameter to the newly created `Flat_Roof_Texture` attribute field, `Slope_Roof_Texture` rule parameter to the newly created `Slope_Roof_Texture` attribute field, and `Building_Type` rule parameter to the newly created `Building_Type` attribute field.
+5. The satellite imagery will instantly render on all valid roof faces, and the other non-roof faces also texturized.
 
 <img src="https://raw.githubusercontent.com/geo2004/leaflet/refs/heads/master/example.png" alt="Textured 3D Roofs Example" width="100%">
 
